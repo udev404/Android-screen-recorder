@@ -1,0 +1,39 @@
+cmake_minimum_required(VERSION 3.22.1)
+project("screencast_native" CXX C)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Find required Android libs
+find_library(log-lib log)
+find_library(android-lib android)
+find_library(mediandk-lib mediandk)
+find_library(OpenSLES-lib OpenSLES)
+find_library(EGL-lib EGL)
+find_library(GLESv2-lib GLESv2)
+
+add_library(
+    screencast_native
+    SHARED
+    encoder.cpp
+    native_bridge.cpp
+)
+
+target_include_directories(screencast_native PRIVATE ${CMAKE_SOURCE_DIR})
+
+target_link_libraries(
+    screencast_native
+    ${log-lib}
+    ${android-lib}
+    ${mediandk-lib}
+    ${OpenSLES-lib}
+    ${EGL-lib}
+    ${GLESv2-lib}
+)
+
+target_compile_options(screencast_native PRIVATE
+    -O2
+    -ffast-math
+    -fvisibility=hidden
+    -fomit-frame-pointer
+)
