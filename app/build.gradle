@@ -1,0 +1,95 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.screencast.pro'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.screencast.pro"
+        minSdk 28
+        targetSdk 35
+        versionCode 1
+        versionName "2.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++20 -O2 -ffast-math"
+                abiFilters 'arm64-v8a', 'x86_64'
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+
+        ndk {
+            abiFilters 'arm64-v8a', 'x86_64'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            jniDebuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt']
+        }
+    }
+}
+
+dependencies {
+    // Core Android
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-service:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
+    implementation 'androidx.activity:activity:1.9.3'
+    implementation 'androidx.fragment:fragment:1.8.5'
+
+    // WebRTC
+    implementation 'io.github.webrtc-sdk:android:125.6422.06.1'
+
+    // Embedded HTTP + WebSocket server (signaling on port 9339)
+    implementation 'org.nanohttpd:nanohttpd:2.3.1'
+    implementation 'org.nanohttpd:nanohttpd-websockets:2.3.1'
+
+    // JSON
+    implementation 'com.google.code.gson:gson:2.11.0'
+
+    // Lottie animations
+    implementation 'com.airbnb.android:lottie:6.6.0'
+
+    // Blur effect
+    implementation 'com.github.Dimezis:BlurView:version-2.0.5'
+
+    // Charts / Graphs for stats
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+}
